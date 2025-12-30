@@ -1,0 +1,9 @@
+[project]
+name = "ghostpm"
+version = "0.1.0"
+description = "User-land package manager"
+authors = [{ name = "ixchele", email = "bengueddimez@gmail.com" }]
+requires-python = ">=3.9"
+
+[project.scripts]
+ghostpm = "ghostpm.cli:main"

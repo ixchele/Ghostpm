@@ -124,10 +124,10 @@ def main():
     if handle_set_path(args):
         return
 
-    if args[0] == "list":
-        list_packages()
-        return
     if len(args) < 2:
+        if args[0] == "list":
+            list_packages()
+            return
         print("Usage: ghostpm install|remove <package>")
         return
 

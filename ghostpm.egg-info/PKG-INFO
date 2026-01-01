@@ -1,6 +1,0 @@
-Metadata-Version: 2.4
-Name: ghostpm
-Version: 0.1.0
-Summary: User-land package manager
-Author-email: ixchele <bengueddimez@gmail.com>
-Requires-Python: >=3.9

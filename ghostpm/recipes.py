@@ -88,6 +88,11 @@ RECIPES = {
         "url": "https://github.com/zed-industries/zed/releases/download/v0.217.3/zed-linux-x86_64.tar.gz",
         "bin": ["bin/zed"],
         "desc": "zed editor"
+    },
+    "brave": {
+        "type": "zip",
+        "url": "https://github.com/brave/brave-browser/releases/download/v1.85.118/brave-browser-1.85.118-linux-amd64.zip",
+        "bin": ["brave"],
+        "desc": "brave-browser"
     }
 }
-

@@ -1,0 +1,3 @@
+ghostpm.egg-info/
+ghostpm/__pycache__/
+ghostpm/installer/__pycache__/

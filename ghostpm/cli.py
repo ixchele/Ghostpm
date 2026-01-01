@@ -9,11 +9,12 @@ from ghostpm.paths import make_paths
 from ghostpm.recipes import RECIPES
 from ghostpm.db import load as db_load, save as db_save
 
-from ghostpm.installer import tar#, appimage
+from ghostpm.installer import tar, zip#, appimage
 from ghostpm.installer.common import ensure_dir, download
 
 INSTALLERS = {
     "tar": tar,
+    "zip": zip,
     # "appimage": appimage,
 }
 

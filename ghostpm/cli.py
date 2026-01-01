@@ -75,6 +75,7 @@ def install(pkg):
     db[pkg] = {
         "type": recipe["type"],
         "url": recipe["url"],
+        "path": paths["PKG_DIR"],
     }
     db_save(db)
 
@@ -98,7 +99,7 @@ def remove(pkg):
                 os.remove(link)
                 print(f"[+] Removed {link}")
 
-    pkg_path = os.path.join(paths["PKG_DIR"], pkg)
+    pkg_path = os.path.join(db[pkg].get("path"), pkg)
     if os.path.exists(pkg_path):
         shutil.rmtree(pkg_path)
         print(f"[+] Removed {pkg_path}")

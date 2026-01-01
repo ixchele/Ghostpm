@@ -14,7 +14,7 @@ def make_paths():
     return {
         "ROOT": root,
         "PKG_DIR": os.path.join(root, "packages"),
-        "CACHE_DIR": os.path.join(root, "cache"),
-        "DB_FILE": os.path.join(root, "db.json"),
+        "CACHE_DIR": os.path.join(HOME, ".cache", "ghostpm"),
+        "DB_FILE": os.path.join(HOME, ".config", "ghostpm", "db.json"),
         "BIN_DIR": os.path.join(HOME, ".local", "bin"),
     }

@@ -12,6 +12,8 @@ from ghostpm.db import load as db_load, save as db_save
 from ghostpm.installer import tar, zip#, appimage
 from ghostpm.installer.common import ensure_dir, download
 
+from ghostpm.resolver.github import resolve_github_repo
+
 INSTALLERS = {
     "tar": tar,
     "zip": zip,
@@ -44,39 +46,63 @@ def handle_set_path(args):
     return False
 
 
-def install(pkg):
-    if pkg not in RECIPES:
-        print(f"[-] Unknown package: {pkg}")
-        return
-
+def install(pkg : str):
     paths = make_paths()
-    recipe = RECIPES[pkg]
 
     ensure_dir(paths["ROOT"])
     ensure_dir(paths["PKG_DIR"])
     ensure_dir(paths["CACHE_DIR"])
     ensure_dir(paths["BIN_DIR"])
 
-    archive_path = os.path.join(paths["CACHE_DIR"], pkg)
-    download(recipe["url"], archive_path)
-
     pkg_path = os.path.join(paths["PKG_DIR"], pkg)
     ensure_dir(pkg_path)
 
-    INSTALLERS[recipe["type"]].install(
+    if pkg in RECIPES:
+        print(f"[+] Installing {pkg} from recipe")
+        recipe = RECIPES[pkg]
+
+        url = recipe["url"]
+        installer_type = recipe["type"]
+        bins = recipe["bin"]
+
+    else:
+        print(f"[+] Installing {pkg} from GitHub releases")
+        asset = resolve_github_repo(pkg)
+
+        url = asset["url"]
+        installer_type = asset["type"]
+        bins = [pkg.split('/')[1]]
+
+    if installer_type not in INSTALLERS:
+        raise RuntimeError(f"Unsupported archive type: {installer_type}")
+
+    archive_path = os.path.join(
+        paths["CACHE_DIR"],
+        os.path.basename(url)
+    )
+
+    download(url, archive_path)
+
+    INSTALLERS[installer_type].install(
         pkg,
         archive_path,
         pkg_path,
-        recipe["bin"],
+        bins,
         paths["BIN_DIR"],
     )
 
     db = db_load()
+
+    if pkg in db:
+        print(f"[!] {pkg} is already installed, overwriting")
+
     db[pkg] = {
-        "type": recipe["type"],
-        "url": recipe["url"],
-        "path": paths["PKG_DIR"],
+        "installer": installer_type,
+        "url": url,
+        "path": paths["ROOT"],
+        "bins": bins,
     }
+
     db_save(db)
 
     print(f"[✓] {pkg} installed")
@@ -99,6 +125,7 @@ def remove(pkg):
                 os.remove(link)
                 print(f"[+] Removed {link}")
 
+    print(db[pkg].get("path"))
     pkg_path = os.path.join(db[pkg].get("path"), pkg)
     if os.path.exists(pkg_path):
         shutil.rmtree(pkg_path)

@@ -5,18 +5,18 @@ RECIPES = {
         "bin": ["bin/nvim"],
         "desc": "Neovim editor",
     },
-    "bat": {
-        "type": "tar",
-        "url": "https://github.com/sharkdp/bat/releases/download/v0.25.0/bat-v0.25.0-x86_64-unknown-linux-gnu.tar.gz",
-        "bin": ["bat"],
-        "desc": "A cat clone with syntax highlighting",
-    },
-    "fzf": {
-        "type": "tar",
-        "url": "https://github.com/junegunn/fzf/releases/download/v0.67.0/fzf-0.67.0-linux_amd64.tar.gz",
-        "bin": ["fzf"],
-        "desc": "Command-line fuzzy finder",
-    },
+    # "bat": {
+    #     "type": "tar",
+    #     "url": "https://github.com/sharkdp/bat/releases/download/v0.25.0/bat-v0.25.0-x86_64-unknown-linux-gnu.tar.gz",
+    #     "bin": ["bat"],
+    #     "desc": "A cat clone with syntax highlighting",
+    # },
+    # "fzf": {
+    #     "type": "tar",
+    #     "url": "https://github.com/junegunn/fzf/releases/download/v0.67.0/fzf-0.67.0-linux_amd64.tar.gz",
+    #     "bin": ["fzf"],
+    #     "desc": "Command-line fuzzy finder",
+    # },
     "ripgrep": {
         "type": "tar",
         "url": "https://github.com/BurntSushi/ripgrep/releases/download/14.1.1/ripgrep-14.1.1-x86_64-unknown-linux-musl.tar.gz",
@@ -53,12 +53,12 @@ RECIPES = {
     #     "bin": ["tokei"],
     #     "desc": "Count code lines quickly",
     # },
-    "dust": {
-        "type": "tar",
-        "url": "https://github.com/bootandy/dust/releases/download/v0.8.6/dust-v0.8.6-x86_64-unknown-linux-musl.tar.gz",
-        "bin": ["dust"],
-        "desc": "More intuitive du",
-    },
+    # "dust": {
+    #     "type": "tar",
+    #     "url": "https://github.com/bootandy/dust/releases/download/v0.8.6/dust-v0.8.6-x86_64-unknown-linux-musl.tar.gz",
+    #     "bin": ["dust"],
+    #     "desc": "More intuitive du",
+    # },
     "delta": {
         "type": "tar",
         "url": "https://github.com/dandavison/delta/releases/download/0.17.0/delta-0.17.0-x86_64-unknown-linux-musl.tar.gz",

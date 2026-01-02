@@ -14,6 +14,7 @@ def _find_root_dir(path):
 
 def install(pkg_name, archive, pkg_dir, bins, bin_dir):
     print(f"[+] Extracting {pkg_name}")
+    print(archive)
 
     with tarfile.open(archive) as tar:
         tar.extractall(pkg_dir)

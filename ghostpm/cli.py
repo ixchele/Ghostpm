@@ -45,8 +45,14 @@ def handle_set_path(args):
 
     return False
 
+def normalize_package_name(pkg):
+    if '/' in pkg:
+        return pkg.split('/')[-1]
+    return pkg
 
 def install(pkg : str):
+    full_repo = pkg
+    pkg_name = normalize_package_name(pkg)
     paths = make_paths()
 
     ensure_dir(paths["ROOT"])
@@ -54,20 +60,20 @@ def install(pkg : str):
     ensure_dir(paths["CACHE_DIR"])
     ensure_dir(paths["BIN_DIR"])
 
-    pkg_path = os.path.join(paths["PKG_DIR"], pkg)
+    pkg_path = os.path.join(paths["PKG_DIR"], pkg_name)
     ensure_dir(pkg_path)
 
-    if pkg in RECIPES:
+    if pkg_name in RECIPES:
         print(f"[+] Installing {pkg} from recipe")
-        recipe = RECIPES[pkg]
+        recipe = RECIPES[pkg_name]
 
         url = recipe["url"]
         installer_type = recipe["type"]
         bins = recipe["bin"]
 
     else:
-        print(f"[+] Installing {pkg} from GitHub releases")
-        asset = resolve_github_repo(pkg)
+        print(f"[+] Installing {pkg_name} from GitHub releases")
+        asset = resolve_github_repo(full_repo)
 
         url = asset["url"]
         installer_type = asset["type"]
@@ -93,48 +99,47 @@ def install(pkg : str):
 
     db = db_load()
 
-    if pkg in db:
-        print(f"[!] {pkg} is already installed, overwriting")
+    if pkg_name in db:
+        print(f"[!] {pkg_name} is already installed, overwriting")
 
-    db[pkg] = {
+    db[pkg_name] = {
         "installer": installer_type,
         "url": url,
         "path": paths["ROOT"],
         "bins": bins,
+        "source" : full_repo if '/' in full_repo else None,
     }
 
     db_save(db)
 
-    print(f"[✓] {pkg} installed")
+    print(f"[✓] {pkg_name} installed")
 
 
 def remove(pkg):
+    pkg_name = normalize_package_name(pkg)
     paths = make_paths()
     db = db_load()
 
-    if pkg not in db:
-        print(f"[-] {pkg} is not installed")
+    if pkg_name not in db:
+        print(f"[-] {pkg_name} is not installed")
         return
 
-    recipe = RECIPES.get(pkg)
+    bins = db[pkg_name].get("bins", [])
+    for b in bins:
+        link = os.path.join(paths["BIN_DIR"], os.path.basename(b))
+        if os.path.exists(link) or os.path.islink(link):
+            os.remove(link)
+            print(f"[+] Removed {link}")
 
-    if recipe:
-        for b in recipe["bin"]:
-            link = os.path.join(paths["BIN_DIR"], os.path.basename(b))
-            if os.path.exists(link) or os.path.islink(link):
-                os.remove(link)
-                print(f"[+] Removed {link}")
-
-    print(db[pkg].get("path"))
-    pkg_path = os.path.join(db[pkg].get("path"), pkg)
+    pkg_path = os.path.join(paths["PKG_DIR"], pkg_name)
     if os.path.exists(pkg_path):
         shutil.rmtree(pkg_path)
         print(f"[+] Removed {pkg_path}")
 
-    del db[pkg]
+    del db[pkg_name]
     db_save(db)
 
-    print(f"[✓] {pkg} removed")
+    print(f"[✓] {pkg_name} removed")
 
 def list_packages():
     db = db_load()

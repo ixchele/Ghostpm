@@ -1,2 +1,2 @@
-# Ghostpm
+# Ghostpm 👻
 User-land Package manager

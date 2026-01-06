@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 
+from subprocess import run
 import sys
 import os
 import shutil
 
 from ghostpm.config import load_config, save_config
+from ghostpm.errors import GhostpmError, InstallError, InvalidCommandError, PermissionDeniedError
 from ghostpm.paths import make_paths
 from ghostpm.recipes import RECIPES
 from ghostpm.db import load as db_load, save as db_save
@@ -13,12 +15,28 @@ from ghostpm.installer import tar, zip#, appimage
 from ghostpm.installer.common import ensure_dir, download
 
 from ghostpm.resolver.github import resolve_github_repo
+import tempfile
 
 INSTALLERS = {
     "tar": tar,
     "zip": zip,
     # "appimage": appimage,
 }
+
+def can_create_path(path: str):
+    parent = os.path.abspath(path)
+
+    while not os.path.exists(parent):
+        parent = os.path.dirname(parent)
+        if parent == "/":
+            break
+
+    try:
+        tmp = tempfile.TemporaryFile(dir=parent)
+        tmp.close()
+        return True
+    except PermissionError:
+        return False
 
 
 def handle_set_path(args):
@@ -35,6 +53,8 @@ def handle_set_path(args):
             path = args[1]
 
         path = os.path.expanduser(path)
+        if not can_create_path(path):
+            raise PermissionDeniedError(f"Permission denied: {path}")
 
         cfg = load_config()
         cfg["root"] = path
@@ -64,16 +84,20 @@ def install(pkg : str):
     ensure_dir(pkg_path)
 
     if pkg_name in RECIPES:
-        print(f"[+] Installing {pkg} from recipe")
+        print(f"[+] Installing {pkg_name} from recipe")
         recipe = RECIPES[pkg_name]
 
         url = recipe["url"]
         installer_type = recipe["type"]
         bins = recipe["bin"]
 
+    elif full_repo == pkg_name:
+        raise InstallError(f"Unknown package: {pkg_name}")
+
     else:
-        print(f"[+] Installing {pkg_name} from GitHub releases")
+        print(f"[+] Searching for {pkg_name} from GitHub releases")
         asset = resolve_github_repo(full_repo)
+        print(f"[+] Installing {pkg_name} from GitHub releases")
 
         url = asset["url"]
         installer_type = asset["type"]
@@ -90,7 +114,7 @@ def install(pkg : str):
     download(url, archive_path)
 
     INSTALLERS[installer_type].install(
-        pkg,
+        pkg_name,
         archive_path,
         pkg_path,
         bins,
@@ -141,6 +165,8 @@ def remove(pkg):
 
     print(f"[✓] {pkg_name} removed")
 
+
+
 def list_packages():
     db = db_load()
 
@@ -152,7 +178,7 @@ def list_packages():
     for pkg in sorted(db.keys()):
         print(f"- {pkg}")
 
-def main():
+def run_cli():
     args = sys.argv[1:]
 
     if handle_set_path(args):
@@ -172,4 +198,15 @@ def main():
     elif cmd == "remove":
         remove(pkg)
     else:
-        print(f"Unknown command: {cmd}")
+        raise InvalidCommandError(f"Unknown command: {cmd}")
+
+
+def main():
+    try:
+        run_cli()
+    except GhostpmError as e:
+        print(f"[!] {e}")
+        return 1
+    except KeyboardInterrupt:
+        print("\n[!] Aborted by user")
+        return 130

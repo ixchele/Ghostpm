@@ -1,6 +1,8 @@
 import urllib.request
+import urllib.error
 import json
 import re
+from ghostpm.errors import AssetsError, GhostpmError, GithubError
 from ghostpm.resolver.get_arch import detect_platform
 from ghostpm.resolver.archive import detect_archive_type
 
@@ -41,9 +43,17 @@ PRIORITY = {
 
 def get_latest_release(repo):
     url = f"https://api.github.com/repos/{repo}/releases/latest"
-    with urllib.request.urlopen(url) as response:
-        data = response.read().decode("utf-8")
-    return json.loads(data)
+
+    try:
+        with urllib.request.urlopen(url) as response:
+            data = response.read().decode("utf-8")
+        return json.loads(data)
+    except urllib.error.HTTPError as e:
+        if e.code == 404:
+            raise GithubError(f"Github repository not found: {repo} (code:{e.code}, {e.url} {e.reason})") from None
+        raise GithubError(f"Github API error ({e.code}) for {repo} ({e.reason})") from None 
+    except urllib.error.URLError as e:
+        raise GithubError(f"{e.reason}")
 
 def matches_system_arch(name: str, system: str, arch: str) -> bool:
     name = name.lower()
@@ -88,40 +98,14 @@ def resolve_asset(assets, system, arch):
         })
 
     if not candidates:
-        return None
+        raise AssetsError("No compatible asset found")
+
     return max(candidates, key=lambda a: a["priority"])
 
-
-# def find_asset(assets, system, arch):
-#     if arch == "amd64":
-#         pattern = re.compile(
-#             f"({system}.*({arch}|x86_64))|(({arch}|x86_64).*{system})",
-#             re.IGNORECASE
-#         )
-#     else:
-#         pattern = re.compile(
-#             f"({system}.*{arch})|({arch}.*{system})",
-#             re.IGNORECASE
-#         )
-#
-#     for asset in assets:
-#         name = asset.get("name", "")
-#         if pattern.search(name):
-#             return {
-#                 "name": name,
-#                 "url": asset.get("browser_download_url"),
-#                 "type": detect_archive_type(name)
-#             }
-#
-#     return None
 
 def resolve_github_repo(repo):
     system, arch = detect_platform()
     release = get_latest_release(repo)
-    # asset = find_asset(release.get("assets", []), system, arch)
     asset = resolve_asset(release.get("assets", []), system, arch)
-
-    if not asset:
-        raise RuntimeError("No compatible asset found")
 
     return asset

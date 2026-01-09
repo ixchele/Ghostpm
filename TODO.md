@@ -1,13 +1,3 @@
-# TODO
-- [ ] `ghostpm search <package>` - search for a package
-- [ ] `ghostpm info <package>` - show package details
-- [ ] `ghostpm upgrade [<package>]` - upgrade package
-- [ ] `ghostpm clean` - clean the cache
-- [ ] `ghostpm doctor` - check the installation
-- [ ] `ghostpm export/import` - Backup configuration
-- [ ] `ghostpm --help` - show help menu 
-
-
 # Ghostpm – TODO / Roadmap
 
 ##  Package management (core)

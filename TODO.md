@@ -90,7 +90,6 @@
 
 ### High priority (v0.2)
 - `ghostpm info`
-- `ghostpm list-available`
 - Desktop profiles
 
 ### Medium priority

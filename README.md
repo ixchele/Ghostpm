@@ -94,8 +94,8 @@ Planned features:
    - ghost upgrade
    - version tracking
    - cache management
-   - export / import
-See TODO.md for the full roadmap.
+   - export / import\
+See [TODO.md](https://github.com/ixchele/Ghostpm/blob/dev/TODO.md) for the full roadmap.
 
 ---
 

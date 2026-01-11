@@ -6,7 +6,7 @@
 - [x] `ghostpm install <package>` – support owner/repo (GitHub releases)
 - [x] `ghostpm remove <package>` – remove installed package
 - [x] `ghostpm list` – list installed packages
-- [ ] `ghostpm list-available` – list all known recipes
+- [x] `ghostpm list-recipes` – list all known recipes
 - [ ] `ghostpm upgrade [<package>]` – upgrade one or all packages
 - [ ] `ghostpm pin <package>` – prevent a package from being upgraded
 - [ ] `ghostpm unpin <package>` – allow upgrades again

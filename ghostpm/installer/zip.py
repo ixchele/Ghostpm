@@ -1,5 +1,6 @@
 import os
 import zipfile
+from ghostpm.errors import InstallError
 from ghostpm.installer.common import symlink
 
 
@@ -23,5 +24,5 @@ def install(pkg_name, archive, pkg_dir, bins, bin_dir):
     for b in bins:
         src = os.path.join(root, b)
         if not os.path.exists(src):
-            raise RuntimeError(f"Binary not found: {src}")
+            raise InstallError(f"Binary not found: {src}")
         symlink(src, os.path.basename(b), bin_dir)

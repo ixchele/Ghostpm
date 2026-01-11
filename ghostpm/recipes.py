@@ -35,24 +35,12 @@ RECIPES = {
         "bin": ["zoxide"],
         "desc": "Smarter cd command",
     },
-    # "tree": {
-    #     "type": "tar",
-    #     "url": "https://github.com/Old-Man-Programmer/tree/releases/download/v2.1.1/tree-2.1.1-linux-x86_64.tar.gz",
-    #     "bin": ["tree"],
-    #     "desc": "Directory listing in tree format",
-    # },
     "hyperfine": {
         "type": "tar",
         "url": "https://github.com/sharkdp/hyperfine/releases/download/v1.19.0/hyperfine-v1.19.0-x86_64-unknown-linux-musl.tar.gz",
         "bin": ["hyperfine"],
         "desc": "Command-line benchmarking tool",
     },
-    # "tokei": {
-    #     "type": "tar",
-    #     "url": "https://github.com/XAMPPRocky/tokei/releases/download/v12.1.2/tokei-12.1.2-x86_64-unknown-linux-musl.tar.gz",
-    #     "bin": ["tokei"],
-    #     "desc": "Count code lines quickly",
-    # },
     "dust": {
         "type": "tar",
         "url": "https://github.com/bootandy/dust/releases/download/v0.8.6/dust-v0.8.6-x86_64-unknown-linux-musl.tar.gz",
@@ -65,34 +53,28 @@ RECIPES = {
         "bin": ["delta"],
         "desc": "Syntax-highlighting pager for git",
     },
-    # "jq": {
-    #     "type": "tar",
-    #     "url": "https://github.com/jqlang/jq/releases/download/jq-1.7.1/jq-linux-amd64.tar.gz",
-    #     "bin": ["jq"],
-    #     "desc": "Command-line JSON processor",
-    # },
-    # "yq": {
-    #     "type": "tar",
-    #     "url": "https://github.com/mikefarah/yq/releases/download/v4.44.3/yq_linux_amd64.tar.gz",
-    #     "bin": ["yq"],
-    #     "desc": "YAML processor",
-    # },
     "eza": {
         "type": "tar",
         "url": "https://github.com/eza-community/eza/releases/download/v0.18.8/eza_x86_64-unknown-linux-musl.tar.gz",
         "bin": ["eza"],
         "desc": "Modern replacement for ls with tree support",
     },
-    "zed": {
+    "gh": {
         "type": "tar",
-        "url": "https://github.com/zed-industries/zed/releases/download/v0.217.3/zed-linux-x86_64.tar.gz",
-        "bin": ["bin/zed"],
-        "desc": "zed editor"
-    },
-    "brave": {
-        "type": "zip",
-        "url": "https://github.com/brave/brave-browser/releases/download/v1.85.118/brave-browser-1.85.118-linux-amd64.zip",
-        "bin": ["brave"],
-        "desc": "brave-browser"
+        "url": "https://github.com/cli/cli/releases/download/v2.83.2/gh_2.83.2_linux_amd64.tar.gz",
+        "bin": ["bin/gh"],
+        "desc": "cli for github"
     }
+    # "zed": {
+    #     "type": "tar",
+    #     "url": "https://github.com/zed-industries/zed/releases/download/v0.217.3/zed-linux-x86_64.tar.gz",
+    #     "bin": ["bin/zed"],
+    #     "desc": "zed editor"
+    # },
+    # "brave": {
+    #     "type": "zip",
+    #     "url": "https://github.com/brave/brave-browser/releases/download/v1.85.118/brave-browser-1.85.118-linux-amd64.zip",
+    #     "bin": ["brave"],
+    #     "desc": "brave-browser"
+    # }
 }

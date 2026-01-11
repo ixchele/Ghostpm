@@ -1,3 +1,6 @@
 ghostpm.egg-info/
 ghostpm/__pycache__/
 ghostpm/installer/__pycache__/
+ghostpm/resolver/__pycache__/
+ghostpm/desktop/__pycache__/
+.venv/

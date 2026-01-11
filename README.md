@@ -79,10 +79,10 @@ contain root path
 
 ##  Limitations
 
-**ghostpm** does not install system libraries
-Some binaries may fail due to system incompatibilities (e.g. GLIBC version)
-.deb / .rpm packages are not supported
-Compilation from source is out of scope
+**ghostpm** does not install system libraries\
+Some binaries may fail due to system incompatibilities (e.g. GLIBC version)\
+.deb / .rpm packages are not supported\
+Compilation from source is out of scope\
 ...
 
 ---
@@ -101,9 +101,9 @@ See TODO.md for the full roadmap.
 
 ## Contributing
 
-Contributions are welcome!
-Open issues for bugs or ideas
-Keep features small and focused
+Contributions are welcome!\
+Open issues for bugs or ideas\
+Keep features small and focused\
 
 ---
 

@@ -1,4 +1,5 @@
 import os
+from ghostpm.errors import InvalidArchiveType
 
 def detect_archive_type(url: str) -> str:
     name = os.path.basename(url)
@@ -7,6 +8,5 @@ def detect_archive_type(url: str) -> str:
         return "tar"
     if name.endswith(".zip"):
         return "zip"
-    if name.endswith(".AppImage"):
-        return "appimage"
-    return "raw"
+    raise InvalidArchiveType("archive type unknown")
+    # return "raw"

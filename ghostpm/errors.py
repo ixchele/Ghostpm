@@ -15,4 +15,6 @@ class GithubError(GhostpmError): pass
 
 class AssetsError(GhostpmError): pass
 
+class InvalidArchiveType(GhostpmError): pass
+
 class InvalidCommandError(GhostpmError): pass

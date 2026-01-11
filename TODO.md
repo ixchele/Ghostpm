@@ -1,20 +1,10 @@
-# TODO
-- [ ] `ghostpm search <package>` - search for a package
-- [ ] `ghostpm info <package>` - show package details
-- [ ] `ghostpm upgrade [<package>]` - upgrade package
-- [ ] `ghostpm clean` - clean the cache
-- [ ] `ghostpm doctor` - check the installation
-- [ ] `ghostpm export/import` - Backup configuration
-- [ ] `ghostpm --help` - show help menu 
-
-
 # Ghostpm – TODO / Roadmap
 
 ##  Package management (core)
 - [ ] `ghostpm search <query>` – search available packages (recipes + GitHub hints)
 - [ ] `ghostpm info <package>` – show detailed package information
 - [x] `ghostpm install <package>` – support owner/repo (GitHub releases)
-- [ ] `ghostpm remove <package>` – remove installed package
+- [x] `ghostpm remove <package>` – remove installed package
 - [x] `ghostpm list` – list installed packages
 - [ ] `ghostpm list-available` – list all known recipes
 - [ ] `ghostpm upgrade [<package>]` – upgrade one or all packages

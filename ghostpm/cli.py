@@ -5,6 +5,9 @@ import sys
 import os
 import shutil
 
+from typing import Callable
+
+from ghostpm import recipes
 from ghostpm.config import load_config, save_config
 from ghostpm.errors import GhostpmError, InstallError, InvalidCommandError, PermissionDeniedError
 from ghostpm.paths import make_paths
@@ -15,12 +18,14 @@ from ghostpm.installer import tar, zip#, appimage
 from ghostpm.installer.common import ensure_dir, download
 
 from ghostpm.resolver.github import resolve_github_repo
+from ghostpm.help_message import HELP_MESSAGE
 import tempfile
+
+type CommandFn = Callable[...]
 
 INSTALLERS = {
     "tar": tar,
     "zip": zip,
-    # "appimage": appimage,
 }
 
 def can_create_path(path: str):
@@ -39,38 +44,31 @@ def can_create_path(path: str):
         return False
 
 
-def handle_set_path(args):
-    if not args:
-        return False
+def setPath(args):
+    if len(args) < 2:
+        raise InvalidCommandError("Usage: ghostpm --set-path <directory>")
 
-    if args[0].startswith("--set-path"):
-        if "=" in args[0]:
-            path = args[0].split("=", 1)[1]
-        else:
-            if len(args) < 2:
-                print("ghostpm --set-path <directory>")
-                sys.exit(1)
-            path = args[1]
+    path = args[1]
+    path = os.path.expanduser(path)
+    if not can_create_path(path):
+        raise PermissionDeniedError(f"Permission denied: {path}")
 
-        path = os.path.expanduser(path)
-        if not can_create_path(path):
-            raise PermissionDeniedError(f"Permission denied: {path}")
+    cfg = load_config()
+    cfg["root"] = path
+    save_config(cfg)
 
-        cfg = load_config()
-        cfg["root"] = path
-        save_config(cfg)
-
-        print(f"[✓] ghostpm root set to {path}")
-        return True
-
-    return False
+    print(f"[✓] ghostpm root set to {path}")
 
 def normalize_package_name(pkg):
     if '/' in pkg:
         return pkg.split('/')[-1]
     return pkg
 
-def install(pkg : str):
+def install(args : list[str]):
+    if len(args) != 2:
+        raise InvalidCommandError("Usage: ghostpm install <package_name>")
+
+    pkg = args[1]
     full_repo = pkg
     pkg_name = normalize_package_name(pkg)
     paths = make_paths()
@@ -139,7 +137,11 @@ def install(pkg : str):
     print(f"[✓] {pkg_name} installed")
 
 
-def remove(pkg):
+def remove(args: list[str]):
+    if len(args) != 2:
+        raise InvalidCommandError("Usage: ghostpm remove <package_name>")
+
+    pkg = args[1]
     pkg_name = normalize_package_name(pkg)
     paths = make_paths()
     db = db_load()
@@ -166,8 +168,9 @@ def remove(pkg):
     print(f"[✓] {pkg_name} removed")
 
 
-
-def list_packages():
+def listInstalled(args):
+    if len(args) != 1:
+        raise InvalidCommandError("Usage: ghostpm list")
     db = db_load()
 
     if not db:
@@ -178,32 +181,49 @@ def list_packages():
     for pkg in sorted(db.keys()):
         print(f"- {pkg}")
 
-def run_cli():
-    args = sys.argv[1:]
 
-    if handle_set_path(args):
+def listRecipes(args: list[str]):
+    if len(args) != 1:
+        raise InvalidCommandError("Usage: ghostpm list-recipes")
+
+    width = max(len(f"[{p}]") for p in recipes.RECIPES)
+    for package in recipes.RECIPES:
+        description = recipes.RECIPES[package].get("desc", "google is your friend")
+        print(f"[{package}]".ljust(width + 2) + f": {description}")
+
+
+
+def help(args):
+    if len(args) != 1:
+        raise InvalidCommandError("Usage: ghostpm --help")
+    print(HELP_MESSAGE)
+
+
+commands : dict[str, CommandFn] = {
+    "install": install,
+    "remove": remove, 
+    "set-path": setPath,
+    "list": listInstalled,
+    "--help": help,
+    "list-recipes": listRecipes,
+}
+
+def handle_command():
+    args : list[str] = sys.argv[1:]
+
+    if len(args) == 0:
+        print("Run `ghostpm --help` to see available commands.")
         return
 
-    if len(args) == 1 and args[0] == "list":
-        list_packages()
-        return
-    if len(args) < 2:
-        print("Usage: ghostpm install|remove <package>")
-        return
-
-    cmd, pkg = args[0], args[1]
-
-    if cmd == "install":
-        install(pkg)
-    elif cmd == "remove":
-        remove(pkg)
-    else:
+    cmd: str = args[0]
+    command = commands.get(cmd)
+    if command is None:
         raise InvalidCommandError(f"Unknown command: {cmd}")
-
+    command(args)
 
 def main():
     try:
-        run_cli()
+        handle_command()
     except GhostpmError as e:
         print(f"[!] {e}")
         return 1

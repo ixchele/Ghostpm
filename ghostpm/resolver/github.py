@@ -36,9 +36,9 @@ IGNORED_KEYWORDS = [
 PRIORITY = {
     "tar": 100,
     "zip": 90,
-    "raw": 80,
-    "deb": 60,
-    "appimage": 50,
+    # "raw": 80,
+    # "deb": 60,
+    # "appimage": 50,
 }
 
 def get_latest_release(repo):

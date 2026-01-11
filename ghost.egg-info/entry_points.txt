@@ -1,0 +1,2 @@
+[console_scripts]
+ghostpm = ghostpm.cli:main

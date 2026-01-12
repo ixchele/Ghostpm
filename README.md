@@ -1,3 +1,5 @@
+![logo](https://raw.githubusercontent.com/ixchele/Ghostpm/refs/heads/main/Logo.png)
+
 # 👻 ghostpm
 
 **ghostpm** is a user-space package manager for Linux.  

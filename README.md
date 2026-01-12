@@ -1,7 +1,5 @@
-![logo](https://raw.githubusercontent.com/ixchele/Ghostpm/refs/heads/main/Logo.png)
-
-# 👻 ghostpm
-
+![logo](https://raw.githubusercontent.com/ixchele/Ghostpm/refs/heads/main/ghostTitle.png)
+## Description
 **ghostpm** is a user-space package manager for Linux.  
 It allows you to install CLI tools and applications **without sudo**, directly in your home directory.
 
@@ -91,8 +89,8 @@ Compilation from source is out of scope\
 ##  Roadmap
 
 Planned features:
-   - ghost search
-   - ghost upgrade
+   - ghostpm search
+   - ghostpm upgrade
    - version tracking
    - cache management
    - export / import\

@@ -64,6 +64,12 @@ RECIPES = {
         "url": "https://github.com/cli/cli/releases/download/v2.83.2/gh_2.83.2_linux_amd64.tar.gz",
         "bin": ["bin/gh"],
         "desc": "cli for github"
+    },
+    "rainbow": {
+        "type": "tar",
+        "url": "https://github.com/arsham/rainbow/releases/download/v1.2.1/figurine_linux_v1.2.1.tar.gz",
+        "bin": ["rainbow"],
+        "desc": "rainbow cat"
     }
     # "zed": {
     #     "type": "tar",

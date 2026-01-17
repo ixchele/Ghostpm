@@ -87,5 +87,16 @@ RECIPES = {
             "categories": "Network;WebBrowser;",
             "terminal": False,
         },
-}
+    },
+    "kitty": {
+        "type": "tar",
+        "url": "https://github.com/kovidgoyal/kitty/releases/download/v0.45.0/kitty-0.45.0-x86_64.txz",
+        "bin": ["bin/kitty"],
+        "desktop": {
+            "name": "kitty",
+            "icon": "kitty",
+            "categories": "System;TerminalEmulator;",
+            "terminal": False,
+        },
+    },
 }

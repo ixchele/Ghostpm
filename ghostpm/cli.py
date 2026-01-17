@@ -3,6 +3,7 @@
 from subprocess import run
 import sys
 import os
+from pathlib import Path
 import shutil
 
 from typing import Callable
@@ -13,8 +14,9 @@ from ghostpm.errors import GhostpmError, InstallError, InvalidCommandError, Perm
 from ghostpm.paths import make_paths
 from ghostpm.recipes import RECIPES
 from ghostpm.db import load as db_load, save as db_save
+from ghostpm.desktop.manager import generate_desktop_entry, remove_desktop_entry
 
-from ghostpm.installer import tar, zip#, appimage
+from ghostpm.installer import tar, zip, deb
 from ghostpm.installer.common import ensure_dir, download
 
 from ghostpm.resolver.github import resolve_github_repo
@@ -26,6 +28,7 @@ type CommandFn = Callable[...]
 INSTALLERS = {
     "tar": tar,
     "zip": zip,
+    "deb": deb,
 }
 
 def can_create_path(path: str):
@@ -118,7 +121,15 @@ def install(args : list[str]):
         bins,
         paths["BIN_DIR"],
     )
-
+    desktop_cfg = RECIPES[pkg_name].get("desktop")
+    if desktop_cfg:
+        generate_desktop_entry(
+            name=desktop_cfg["name"],
+            exec_path=str(Path(paths["BIN_DIR"]) / pkg_name),
+            icon=desktop_cfg.get("icon", ""),
+            categories=desktop_cfg.get("categories", "Utility;"),
+            terminal=desktop_cfg.get("terminal", False),
+        )
     db = db_load()
 
     if pkg_name in db:
@@ -161,6 +172,10 @@ def remove(args: list[str]):
     if os.path.exists(pkg_path):
         shutil.rmtree(pkg_path)
         print(f"[+] Removed {pkg_path}")
+
+    desktop_cfg = RECIPES[pkg_name].get("desktop")
+    if desktop_cfg:
+        remove_desktop_entry(desktop_cfg["name"])
 
     del db[pkg_name]
     db_save(db)

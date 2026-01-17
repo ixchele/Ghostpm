@@ -6,9 +6,9 @@ RECIPES = {
         "desc": "Neovim editor",
     },
     "bat": {
-        "type": "tar",
-        "url": "https://github.com/sharkdp/bat/releases/download/v0.25.0/bat-v0.25.0-x86_64-unknown-linux-gnu.tar.gz",
-        "bin": ["bat"],
+        "type": "deb",
+        "url": "https://github.com/sharkdp/bat/releases/download/v0.25.0/bat_0.25.0_amd64.deb",
+        "bin": ["usr/bin/bat"],
         "desc": "A cat clone with syntax highlighting",
     },
     "fzf": {
@@ -70,17 +70,22 @@ RECIPES = {
         "url": "https://github.com/arsham/rainbow/releases/download/v1.2.1/figurine_linux_v1.2.1.tar.gz",
         "bin": ["rainbow"],
         "desc": "rainbow cat"
-    }
+    },
     # "zed": {
     #     "type": "tar",
     #     "url": "https://github.com/zed-industries/zed/releases/download/v0.217.3/zed-linux-x86_64.tar.gz",
     #     "bin": ["bin/zed"],
     #     "desc": "zed editor"
     # },
-    # "brave": {
-    #     "type": "zip",
-    #     "url": "https://github.com/brave/brave-browser/releases/download/v1.85.118/brave-browser-1.85.118-linux-amd64.zip",
-    #     "bin": ["brave"],
-    #     "desc": "brave-browser"
-    # }
+    "brave": {
+        "type": "deb",
+        "url": "https://github.com/brave/brave-browser/releases/download/v1.78.97/brave-browser_1.78.97_amd64.deb",
+        "bin": ["opt/brave.com/brave/brave"],
+        "desktop": {
+            "name": "Brave Browser",
+            "icon": "",
+            "categories": "Network;WebBrowser;",
+            "terminal": False,
+        },
+}
 }
